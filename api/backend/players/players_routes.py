@@ -1,30 +1,15 @@
 ########################################################
-# Sample customers blueprint of endpoints
+# Sample players blueprint of endpoints
 # Remove this file if you are not using it in your project
 ########################################################
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.db_connection import db
-from backend.ml_models.model01 import predict
 
-customers = Blueprint('customers', __name__)
-
-@customers.route('/prediction/<var01>/<var02>', methods=['GET'])
-def predict_value(var01, var02):
-    current_app.logger.info(f'var01 = {var01}')
-    current_app.logger.info(f'var02 = {var02}')
-
-    returnVal = predict(var01, var02)
-    return_dict = {'result': returnVal}
-
-    the_response = make_response(jsonify(return_dict))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
-# Get all customers from the DB
-@customers.route('/customers', methods=['GET'])
+players = Blueprint('players', __name__)
+"""
+# Get all tournament data for 
+@customers.route('/players', methods=['GET'])
 def get_customers():
     current_app.logger.info('customer_routes.py: GET /customers')
     cursor = db.get_db().cursor()
@@ -56,19 +41,21 @@ def update_customer():
     r = cursor.execute(query, data)
     db.get_db().commit()
     return 'customer updated!'
-
-# Get customer detail for customer with particular userID
-@customers.route('/customers/<userID>', methods=['GET'])
-def get_customer(userID):
-    current_app.logger.info('GET /customers/<userID> route')
+"""
+# Get tournament details for a player_id
+@players.route('/players/<player_id>', methods=['GET'])
+def get_player_tournament(player_id):
+    current_app.logger.info('GET /players/<player_id> route')
     cursor = db.get_db().cursor()
-    cursor.execute('select id, first_name, last_name from customers where id = {0}'.format(userID))
-    row_headers = [x[0] for x in cursor.description]
+    query = "SELECT tournaments.tournament_name\
+             FROM players JOIN participation ON players.player_id = participation.player_id\
+             JOIN tournaments ON participation.tournament_id = tournaments.tournament_id\
+             WHERE players.player_id = " + str(player_id)
+    cursor.execute(query)
+
     json_data = []
     theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
+    the_response = make_response(theData)
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
