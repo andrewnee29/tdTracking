@@ -1,19 +1,19 @@
-DROP SCHEMA IF EXISTS `usar` ;
-CREATE SCHEMA IF NOT EXISTS `usar` DEFAULT CHARACTER SET latin1 ;
-USE `usar` ;
+DROP SCHEMA IF EXISTS usar;
+CREATE SCHEMA IF NOT EXISTS usar DEFAULT CHARACTER SET utf8mb4;
+USE usar ;
 
 -- -----------------------------------------------------
 -- Table `usar`.`players`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `usar`.`players`
+CREATE TABLE IF NOT EXISTS players
 (
     `player_id`             INT(6)      NOT NULL,
     `full_name`             VARCHAR(50) NULL DEFAULT NULL,
     `membership_status`     VARCHAR(50) NULL DEFAULT NULL,
-    `member_since`          DATE        NULL DEFAULT NULL,
-    `membership_expiration` DATE        NULL DEFAULT NULL,
+    `member_since`          DATETIME    NULL DEFAULT NULL,
+    `membership_expiration` DATETIME    NULL DEFAULT NULL,
     `gender`                VARCHAR(50) NULL DEFAULT NULL,
-    `email`                 VARCHAR(25) NULL DEFAULT NULL,
+    `email`                 VARCHAR(50) NULL DEFAULT NULL,
     `phone`                 VARCHAR(25) NULL DEFAULT NULL,
     `dob`                   VARCHAR(25) NULL DEFAULT NULL,
     `address`               LONGTEXT    NULL DEFAULT NULL,
@@ -27,12 +27,12 @@ CREATE TABLE IF NOT EXISTS `usar`.`players`
 -- -----------------------------------------------------
 -- Table `usar`.`tournaments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS usar.tournaments
+CREATE TABLE IF NOT EXISTS tournaments
 (
     tournament_id   INT(11)     NOT NULL AUTO_INCREMENT,
-    tournament_name VARCHAR(50) NULL DEFAULT NULL,
+    tournament_name VARCHAR(256) NULL DEFAULT NULL,
     location        VARCHAR(50) NULL DEFAULT NULL,
-    date            DATE        NULL DEFAULT NULL,
+    date            DATETIME        NULL DEFAULT NULL,
     type            VARCHAR(50) NULL DEFAULT NULL,
     fwango_url      VARCHAR(50) NULL DEFAULT NULL,
     PRIMARY KEY (tournament_id)
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS usar.tournaments
 -- -----------------------------------------------------
 -- Table `usar`.`participation`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS usar.participation
+CREATE TABLE IF NOT EXISTS participation
 (
     player_id     INT(6)   NOT NULL,
     tournament_id INT(11)  NOT NULL,
